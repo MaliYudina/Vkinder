@@ -2,7 +2,6 @@
 Vk API returns random format results.
 Field_adapters module performs data normalization
 """
-
 from typing import List
 
 
@@ -17,8 +16,10 @@ def city_to_string(city: dict) -> str:
 
 
 def split_string(string: str) -> List[str]:
-    # TODO: remove spaces -- str.strip()
-    return string.split(DEFAULT_RS)
+    # TODO: test coverage
+    parts = string.split(DEFAULT_RS)
+    for i, part in enumerate(parts):
+        parts[i] = part.strip()
 
 
 def dummy(anything):

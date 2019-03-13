@@ -23,3 +23,40 @@ class TestEvaluators(unittest.TestCase):
             {'id': 1, 'title': 'Москва'},
             {'id': 2, 'title': 'спб'}
         ) == 0
+
+    # tests for music
+
+    def test_eval_music_match(self):
+        assert evaluators.eval_music(['Guitar, Skate, pop-punk'],
+                                    ['Guitar, Skate, pop-punk']) == 10
+
+    def test_eval_music_mymusic_not_set(self):
+        assert evaluators.eval_music(['Guitar, Skate, pop-punk'],
+                                    ['']) == 0
+
+    def test_eval_music_music_not_set(self):
+        assert evaluators.eval_music([''],
+                                    ['Guitar, Skate, pop-punk']) == 0
+
+    def test_eval_music_different_music(self):
+        assert evaluators.eval_music(['Guitar'],
+                                    ['Punk']) == 0
+
+# tests for interests
+
+    def test_eval_interests_match(self):
+        assert evaluators.eval_interests(['Concerts, Aliens, XBox 360'],
+                                    ['Concerts, Aliens, XBox 360']) == 10
+
+    def test_eval_interests_myinterests_not_set(self):
+        assert evaluators.eval_interests(['Guitar, Skate, pop-punk'],
+                                    ['']) == 0
+
+    def test_eval_interests_interests_not_set(self):
+        assert evaluators.eval_interests([''],
+                                    ['Guitar, Skate, pop-punk']) == 0
+
+    def test_eval_interests_different_interests(self):
+        assert evaluators.eval_interests(['Guitar'],
+                                    ['Punk']) == 0
+

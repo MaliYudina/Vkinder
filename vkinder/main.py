@@ -5,23 +5,33 @@
 - подписчики
 - пользователи общих групп
 """
-from .vk.user import User
+from vkinder.searchparams import SearchParams
 from .vk import api
-from .evaluators import eval_city
+from .evaluators import eval_city, eval_interests, eval_music, eval_books, eval_movies
 from typing import Dict
-from .field_adapters import dummy, city_to_string
+from .field_adapters import dummy, city_to_string, split_string
 
 
 EVALUATORS = {
     'city': eval_city,
+    'interests': eval_interests,
+    'music': eval_music,
+    'books': eval_books,
+    'movies': eval_movies,
+
 }
 
 ADAPTERS = {
     'city': city_to_string,
+    'interests': split_string,
+    'music': split_string,
+    'books': split_string,
+    'movies': split_string,
+
 }
 
 
-def top_n(target_user: User) -> Dict[str, int]:
+def top_n(target_user: SearchParams) -> Dict[str, int]:
     """
     1. Get users pool
     2. For each user in pool, fire up all evaluators.
@@ -30,8 +40,11 @@ def top_n(target_user: User) -> Dict[str, int]:
     matches = dict()
 
     pool = api.search(
+        target_user.city,
         target_user.interests,
         target_user.movies,
+        target_user.books,
+        target_user.movies
     )
     # Pool will be something like:
     # [{'bdate': '1.11.1901',
@@ -57,6 +70,8 @@ def top_n(target_user: User) -> Dict[str, int]:
             if not user.get(field):
                 continue
 
+            field_obj = getattr(target_user, field)
+
             # Get a matching adapter from available list.
             # If none found, use default ("dummy"), which transparently returns the value as-is.
             adapter = ADAPTERS.get(
@@ -64,7 +79,7 @@ def top_n(target_user: User) -> Dict[str, int]:
 
             cost = evaluator(
                 adapter(user[field]),
-                getattr(target_user, field)
+                field_obj.value  # NOTE: if changed into class, need to access an attribute, not class itself
             )
             try:
                 matches[user['id']] += cost
