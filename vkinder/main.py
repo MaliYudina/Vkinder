@@ -7,7 +7,7 @@
 """
 from vkinder.searchparams import SearchParams
 from .vk import api
-from .evaluators import eval_city, eval_interests, eval_music, eval_books, eval_movies
+from vkinder.evaluators import eval_city, eval_interests, eval_music, eval_books, eval_movies
 from typing import Dict
 from .field_adapters import dummy, city_to_string, split_string
 
@@ -31,7 +31,7 @@ ADAPTERS = {
 }
 
 
-def top_n(target_user: SearchParams) -> Dict[str, int]:
+def top_n(search_params: SearchParams) -> Dict[str, int]:
     """
     1. Get users pool
     2. For each user in pool, fire up all evaluators.
@@ -40,11 +40,11 @@ def top_n(target_user: SearchParams) -> Dict[str, int]:
     matches = dict()
 
     pool = api.search(
-        target_user.city,
-        target_user.interests,
-        target_user.movies,
-        target_user.books,
-        target_user.movies
+        search_params.city,
+        search_params.interests,
+        search_params.movies,
+        search_params.books,
+        search_params.movies
     )
     # Pool will be something like:
     # [{'bdate': '1.11.1901',
@@ -70,7 +70,7 @@ def top_n(target_user: SearchParams) -> Dict[str, int]:
             if not user.get(field):
                 continue
 
-            field_obj = getattr(target_user, field)
+            field_obj = getattr(search_params, field)
 
             # Get a matching adapter from available list.
             # If none found, use default ("dummy"), which transparently returns the value as-is.

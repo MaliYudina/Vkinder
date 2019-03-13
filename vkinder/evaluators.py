@@ -23,24 +23,19 @@ props_dict = {
 }
 
 
-class Evaluators:
-    def __init__(self, city_cost, interest_cost):
-        self.city_cost = city_cost
-        self.interest_cost = interest_cost
-
-    def eval_city(self, city, mycity):
-        """
-        evaluate city location in relation to `mycity`
-        :return: integer (cost)
-        """
-        match_factor = 10
-        # City was not set either in original user`s props
-        # or the user that we are evaluating
-        if not mycity or not city:
-            return 0
-        if city == mycity:
-            return match_factor * self.city_cost
+def eval_city(city, mycity, basecost=1):
+    """
+    evaluate city location in relation to `mycity`
+    :return: integer (cost)
+    """
+    match_factor = 10
+    # City was not set either in original user`s props
+    # or the user that we are evaluating
+    if not mycity or not city:
         return 0
+    if city == mycity:
+        return match_factor * basecost
+    return 0
 
 
 def eval_interests(interests, myinterest):

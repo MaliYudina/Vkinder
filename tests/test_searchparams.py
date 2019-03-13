@@ -50,6 +50,7 @@ class TestFields(unittest.TestCase):
             weight=1,
             value=[],
         )
+
     def test_check_type_value_str_not_ok(self):
         with pytest.raises(TypeError):
             sparam.StringField(
@@ -64,26 +65,3 @@ class TestFields(unittest.TestCase):
             weight=1,
             value='bb',
         )
-
-
-
-        #
-    # def test_check_type_name_wrong(self):
-    #     self.assertFalse(type(self.name) is not str)
-    #
-    # def test_check_type_value_ok(self):
-    #     self.assertTrue(type(self.value) is list or dict)
-    #
-    # def test_check_type_value_wrong(self):
-    #     self.assertFalse(type(self.value) is not list or not dict)
-    #
-    # def test_check_type_weight_ok(self):
-    #     self.assertTrue(type(self.weight) is int)
-    #
-    # def test_check_type_weight_wrong(self):
-    #     self.assertFalse(type(self.weight) is not int)
-
-    # def test_check_type_name_wrong(self):
-    #     assert evaluators.Child.check_type_name(2)
-    #
-

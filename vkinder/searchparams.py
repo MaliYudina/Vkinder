@@ -1,19 +1,11 @@
 """
-User модуль описывает свойства пользователя Вк для последующей обработки
+Mодуль описывает свойства пользователя Вк для последующей обработки
 """
 
-# An idea: use classes (like Field) as an input for User`s constuctor:
-# user = User(
-#     books=ListField(
-#         name='books'
-#         value=['a', 'b'],
-#         cost=10),
-#     music=ListField(...),
-#     ...,
-# )
+from typing import List
 
 
-class SearchParams:
+class _SearchParams:
     """
     Defines user`s properties
     """
@@ -73,3 +65,13 @@ class StringField(BaseField):
 
 class ListField(BaseField):
     mytype = list
+
+
+class SearchParams:
+    def __init__(self, fields: List[BaseField]) -> None:
+        self.registry = dict()
+
+        # TODO: iterating through the `fields` list, insert each object
+        # TODO: into the registry (`self.registry`).
+        # TODO: The key is `name` attribute, and the value is the object itself.
+
