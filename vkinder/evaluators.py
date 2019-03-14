@@ -23,7 +23,19 @@ props_dict = {
 }
 
 
-def eval_city(city, mycity, basecost=1):
+def list_xsections(one: list, another: list) -> list:
+    """
+    Function compares two lists, returns a new list which represents common elements
+    """
+    # TODO: TESTS!
+    common = []
+    for elem in one:
+        if elem in another:
+            common.append(elem)
+    return common
+
+
+def eval_city(city, mycity, basecost):
     """
     evaluate city location in relation to `mycity`
     :return: integer (cost)
@@ -38,14 +50,11 @@ def eval_city(city, mycity, basecost=1):
     return 0
 
 
-def eval_interests(interests, myinterest):
+def eval_interests(interests, myinterest, basecost):
     """
     evaluate interest of the target user and potential candidates
-    :param interests:
-    :param myinterest:
     :return: integer (cost)
     """
-    basecost = 1
     match_factor = 10
     if not interests or not myinterest:
         return 0
@@ -54,14 +63,11 @@ def eval_interests(interests, myinterest):
     return 0
 
 
-def eval_music(music, mymusic):
+def eval_music(music, mymusic, basecost):
     """
     evaluate music of the target user and potential candidates
-    :param music:
-    :param mymusic:
     :return: integer (cost)
     """
-    basecost = 1
     match_factor = 10
     if not music or not mymusic:
         return 0
@@ -70,30 +76,25 @@ def eval_music(music, mymusic):
     return 0
 
 
-def eval_books(books, mybooks):
+def eval_books(books, mybooks, basecost):
     """
     evaluate books of the target user and potential candidates
-    :param books:
-    :param mybooks:
     :return: integer (cost)
     """
-    basecost = 1
-    match_factor = 10
     if not books or not mybooks:
+        raise Exception('a: %s, b: %s' % (books, mybooks))
         return 0
-    if books == mybooks:
-        return match_factor * basecost
-    return 0
+    common = list_xsections(books, mybooks)
+    if not common:
+        return 0
+    return len(common) * basecost
 
 
-def eval_movies(movies, mymovies):
+def eval_movies(movies, mymovies, basecost):
     """
     evaluate movies of the target user and potential candidates
-    :param movies:
-    :param mymovies:
     :return: integer (cost)
     """
-    basecost = 1
     match_factor = 10
     if not movies or not mymovies:
         return 0

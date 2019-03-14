@@ -3,33 +3,33 @@ Mодуль описывает свойства пользователя Вк д
 """
 
 from typing import List
+from vkinder.evaluators import eval_city, eval_interests, eval_movies, eval_books, eval_music
+from vkinder.field_adapters import city_to_string, split_string
 
 
-class _SearchParams:
-    """
-    Defines user`s properties
-    """
-    def __init__(
-            self, interests, books, movies, music, city,
-            interests_cost, books_cost, movies_cost, city_cost,
-    ):
-        for param in [interests, books, movies, music]:
-            if not isinstance(param, (list, tuple)):
-                raise TypeError('Must be an iterable')
-        if not isinstance(city, str):
-            raise TypeError('city must be a string')
-        self.interests = interests
-        self.books = books
-        self.movies = movies
-        self.music = music
-        self.city = city
+EVALUATORS = {
+    'city': eval_city,
+    'interests': eval_interests,
+    'music': eval_music,
+    'books': eval_books,
+    'movies': eval_movies,
+}
+
+ADAPTERS = {
+    'city': city_to_string,
+    'interests': split_string,
+    'music': split_string,
+    'books': split_string,
+    'movies': split_string,
+
+}
 
 
 class BaseField:
 
     mytype = str
 
-    def __init__(self, name, value, weight):
+    def __init__(self, name, value, weight=1):
         self.check_type_name(name)
         self.check_type_value(value)
         self.check_type_weight(weight)
@@ -70,8 +70,9 @@ class ListField(BaseField):
 class SearchParams:
     def __init__(self, fields: List[BaseField]) -> None:
         self.registry = dict()
+        for field in fields:
+            self.registry[field.name] = field
 
         # TODO: iterating through the `fields` list, insert each object
         # TODO: into the registry (`self.registry`).
         # TODO: The key is `name` attribute, and the value is the object itself.
-

@@ -12,39 +12,23 @@ from typing import Dict
 from .field_adapters import dummy, city_to_string, split_string
 
 
-EVALUATORS = {
-    'city': eval_city,
-    'interests': eval_interests,
-    'music': eval_music,
-    'books': eval_books,
-    'movies': eval_movies,
 
-}
-
-ADAPTERS = {
-    'city': city_to_string,
-    'interests': split_string,
-    'music': split_string,
-    'books': split_string,
-    'movies': split_string,
-
-}
+from vkinder.searchparams import EVALUATORS, ADAPTERS
 
 
 def top_n(search_params: SearchParams) -> Dict[str, int]:
     """
-    1. Get users pool
-    2. For each user in pool, fire up all evaluators.
+    1. Get users candidates
+    2. For each user_raw in candidates, fire up all evaluators.
      Result is written into a separate dictionary, which will be returned.
     """
     matches = dict()
 
-    pool = api.search(
-        search_params.city,
-        search_params.interests,
-        search_params.movies,
-        search_params.books,
-        search_params.movies
+
+    # дергаем ручку вкапи
+
+    candidates = api.search(
+
     )
     # Pool will be something like:
     # [{'bdate': '1.11.1901',
@@ -61,28 +45,32 @@ def top_n(search_params: SearchParams) -> Dict[str, int]:
     #  'photo_big': ...
     # ... ]
 
-    # Look at each user in the pool individually.
-    for user in pool:
+    # Look at each user_raw in the candidates individually.
+    for user_raw in candidates:
+
         # Process EVALUATORS keys ('city')
         for field, evaluator in EVALUATORS.items():
             # field = e.g. 'city'
             # evaluator = e.g. 'city_to_string'
-            if not user.get(field):
+            if not user_raw.get(field):
                 continue
 
-            field_obj = getattr(search_params, field)
+            if not search_params.registry.get(field):
+                continue
+            field_obj = search_params.registry[field]
 
             # Get a matching adapter from available list.
             # If none found, use default ("dummy"), which transparently returns the value as-is.
             adapter = ADAPTERS.get(
                 field, dummy)
 
-            cost = evaluator(
-                adapter(user[field]),
-                field_obj.value  # NOTE: if changed into class, need to access an attribute, not class itself
+            weight = evaluator(
+                adapter(user_raw[field]),
+                field_obj.value,
+                field_obj.weight,
             )
             try:
-                matches[user['id']] += cost
+                matches[user_raw['id']] += weight
             except KeyError:
-                matches[user['id']] = cost
+                matches[user_raw['id']] = weight
     return matches
