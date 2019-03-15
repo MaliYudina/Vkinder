@@ -5,6 +5,7 @@
 - подписчики
 - пользователи общих групп
 """
+import operator
 from vkinder.searchparams import SearchParams
 from .vk import api
 from vkinder.evaluators import eval_city, eval_interests, eval_music, eval_books, eval_movies
@@ -73,4 +74,11 @@ def top_n(search_params: SearchParams) -> Dict[str, int]:
                 matches[user_raw['id']] += weight
             except KeyError:
                 matches[user_raw['id']] = weight
-    return matches
+    # return matches
+    # список кортежей, отсортированных по второму элементу в каждом кортеже.
+    #[(17300535, 200), (2128351, 100), (2677959, 0)]
+    sorted_matches = sorted(matches.items(), key=operator.itemgetter(1), reverse=True)
+    dict_sorted = dict(sorted_matches)
+    return dict_sorted
+
+
