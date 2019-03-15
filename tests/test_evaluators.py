@@ -5,6 +5,12 @@ from vkinder import evaluators
 
 class TestEvaluators(unittest.TestCase):
 
+    def test_list_xsections_ok(self):
+        assert evaluators.list_xsections(['a', 'b'], ['a', 'c']) == ['a']
+
+    def test_list_xsections_empty(self):
+        assert evaluators.list_xsections([], ['a', 'c']) == [] # TODO надо ли проверять на НЕ список?
+
     def test_eval_city_match(self):
         assert evaluators.eval_city('spb', 'spb', 1) == 10
 

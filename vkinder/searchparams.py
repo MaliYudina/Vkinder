@@ -38,6 +38,11 @@ class BaseField:
         self.value = value
         self.weight = weight
 
+    def adapters_name(self, city):
+        if self.name == 'city':
+            return city['title']
+
+
     @staticmethod
     def check_type_name(name):
         """
@@ -73,6 +78,3 @@ class SearchParams:
         for field in fields:
             self.registry[field.name] = field
 
-        # TODO: iterating through the `fields` list, insert each object
-        # TODO: into the registry (`self.registry`).
-        # TODO: The key is `name` attribute, and the value is the object itself.
