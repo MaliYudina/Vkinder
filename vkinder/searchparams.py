@@ -38,11 +38,6 @@ class BaseField:
         self.value = value
         self.weight = weight
 
-    def adapters_name(self, city):
-        if self.name == 'city':
-            return city['title']
-
-
     @staticmethod
     def check_type_name(name):
         """
@@ -51,6 +46,11 @@ class BaseField:
         if isinstance(name, str):
             return name
         raise TypeError('name must be an instance of string')
+
+    @staticmethod
+    def adapters_name(name):
+        if name == 'city':
+            city_to_string(name)
 
     @staticmethod
     def check_type_weight(weight):

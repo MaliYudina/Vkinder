@@ -9,7 +9,7 @@ class TestEvaluators(unittest.TestCase):
         assert evaluators.list_xsections(['a', 'b'], ['a', 'c']) == ['a']
 
     def test_list_xsections_empty(self):
-        assert evaluators.list_xsections([], ['a', 'c']) == [] # TODO надо ли проверять на НЕ список?
+        assert evaluators.list_xsections([], ['a', 'c']) == []
 
     def test_eval_city_match(self):
         assert evaluators.eval_city('spb', 'spb', 1) == 10

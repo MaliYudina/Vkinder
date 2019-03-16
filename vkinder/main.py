@@ -9,7 +9,7 @@ import operator
 from vkinder.searchparams import SearchParams
 from .vk import api
 from vkinder.evaluators import eval_city, eval_interests, eval_music, eval_books, eval_movies
-from typing import Dict
+from typing import List
 from .field_adapters import dummy, city_to_string, split_string
 
 
@@ -17,7 +17,7 @@ from .field_adapters import dummy, city_to_string, split_string
 from vkinder.searchparams import EVALUATORS, ADAPTERS
 
 
-def top_n(search_params: SearchParams) -> Dict[str, int]:
+def top_n(search_params: SearchParams, candidates: List[dict], number=3) -> List[int]:
     """
     1. Get users candidates
     2. For each user_raw in candidates, fire up all evaluators.
@@ -28,9 +28,9 @@ def top_n(search_params: SearchParams) -> Dict[str, int]:
 
     # дергаем ручку вкапи
 
-    candidates = api.search(
-
-    )
+    # candidates = api.search(
+    #
+    # )
     # Pool will be something like:
     # [{'bdate': '1.11.1901',
     #  'books': 'words, words, words',
@@ -78,7 +78,6 @@ def top_n(search_params: SearchParams) -> Dict[str, int]:
     # список кортежей, отсортированных по второму элементу в каждом кортеже.
     #[(17300535, 200), (2128351, 100), (2677959, 0)]
     sorted_matches = sorted(matches.items(), key=operator.itemgetter(1), reverse=True)
-    dict_sorted = dict(sorted_matches)
-    return dict_sorted
+    return sorted_matches[0:number]
 
 

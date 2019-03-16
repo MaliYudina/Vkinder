@@ -23,11 +23,22 @@ props_dict = {
 }
 
 
+def eval_lists(one: list, another: list) -> int:
+    match_factor = 10
+    common = []
+    for elem in one:
+        if elem in another:
+            common.append(elem)
+    weight = match_factor * len(common)
+    return weight
+
+
+
+
 def list_xsections(one: list, another: list) -> list:
     """
     Function compares two lists, returns a new list which represents common elements
     """
-    # TODO: TESTS!
     common = []
     for elem in one:
         if elem in another:
