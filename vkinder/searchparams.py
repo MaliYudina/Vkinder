@@ -3,16 +3,17 @@ Mодуль описывает свойства пользователя Вк д
 """
 
 from typing import List
-from vkinder.evaluators import eval_city, eval_interests, eval_movies, eval_books, eval_music
+from vkinder.evaluators import eval_lists, eval_city, eval_interests, eval_movies, eval_books, eval_music
 from vkinder.field_adapters import city_to_string, split_string
 
 
 EVALUATORS = {
+
     'city': eval_city,
-    'interests': eval_interests,
-    'music': eval_music,
-    'books': eval_books,
-    'movies': eval_movies,
+    'interests': eval_lists,
+    'music': eval_lists,
+    'books': eval_lists,
+    'movies': eval_lists,
 }
 
 ADAPTERS = {

@@ -61,54 +61,54 @@ def eval_city(city, mycity, basecost):
     return 0
 
 
-def eval_interests(interests, myinterest, basecost):
-    """
-    evaluate interest of the target user and potential candidates
-    :return: integer (cost)
-    """
-    match_factor = 10
-    if not interests or not myinterest:
-        return 0
-    if interests == myinterest:
-        return match_factor * basecost
-    return 0
-
-
-def eval_music(music, mymusic, basecost):
-    """
-    evaluate music of the target user and potential candidates
-    :return: integer (cost)
-    """
-    match_factor = 10
-    if not music or not mymusic:
-        return 0
-    if music == mymusic:
-        return match_factor * basecost
-    return 0
-
-
-def eval_books(books, mybooks, basecost):
-    """
-    evaluate books of the target user and potential candidates
-    :return: integer (cost)
-    """
-    if not books or not mybooks:
-        raise Exception('a: %s, b: %s' % (books, mybooks))
-        return 0
-    common = list_xsections(books, mybooks)
-    if not common:
-        return 0
-    return len(common) * basecost
-
-
-def eval_movies(movies, mymovies, basecost):
-    """
-    evaluate movies of the target user and potential candidates
-    :return: integer (cost)
-    """
-    match_factor = 10
-    if not movies or not mymovies:
-        return 0
-    if movies == mymovies:
-        return match_factor * basecost
-    return 0
+# def eval_interests(interests, myinterest, basecost):
+#     """
+#     evaluate interest of the target user and potential candidates
+#     :return: integer (cost)
+#     """
+#     match_factor = 10
+#     if not interests or not myinterest:
+#         return 0
+#     if interests == myinterest:
+#         return match_factor * basecost
+#     return 0
+#
+#
+# def eval_music(music, mymusic, basecost):
+#     """
+#     evaluate music of the target user and potential candidates
+#     :return: integer (cost)
+#     """
+#     match_factor = 10
+#     if not music or not mymusic:
+#         return 0
+#     if music == mymusic:
+#         return match_factor * basecost
+#     return 0
+#
+#
+# def eval_books(books, mybooks, basecost):
+#     """
+#     evaluate books of the target user and potential candidates
+#     :return: integer (cost)
+#     """
+#     if not books or not mybooks:
+#         raise Exception('a: %s, b: %s' % (books, mybooks))
+#         return 0
+#     common = list_xsections(books, mybooks)
+#     if not common:
+#         return 0
+#     return len(common) * basecost
+#
+#
+# def eval_movies(movies, mymovies, basecost):
+#     """
+#     evaluate movies of the target user and potential candidates
+#     :return: integer (cost)
+#     """
+#     match_factor = 10
+#     if not movies or not mymovies:
+#         return 0
+#     if movies == mymovies:
+#         return match_factor * basecost
+#     return 0
