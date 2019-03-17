@@ -1,30 +1,8 @@
 """
-Mодуль описывает свойства пользователя Вк для последующей обработки
+searchparams module describes properties of the searched user
 """
 
 from typing import List
-from vkinder.evaluators import eval_lists, eval_city
-    #eval_interests, eval_movies, eval_books, eval_music
-from vkinder.field_adapters import city_to_string, split_string
-
-
-EVALUATORS = {
-
-    'city': eval_city,
-    'interests': eval_lists,
-    'music': eval_lists,
-    'books': eval_lists,
-    'movies': eval_lists,
-}
-
-ADAPTERS = {
-    'city': city_to_string,
-    'interests': split_string,
-    'music': split_string,
-    'books': split_string,
-    'movies': split_string,
-
-}
 
 
 class BaseField:
@@ -50,12 +28,10 @@ class BaseField:
         raise TypeError('name must be an instance of string')
 
     @staticmethod
-    def adapters_name(name):
-        if name == 'city':
-            city_to_string(name)
-
-    @staticmethod
     def check_type_weight(weight):
+        """
+        Name is always string. Check if string only
+        """
         if isinstance(weight, int):
             return weight
         raise TypeError('Weight must be an integer')

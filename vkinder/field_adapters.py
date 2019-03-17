@@ -16,7 +16,6 @@ def city_to_string(city: dict) -> str:
 
 
 def split_string(string: str) -> List[str]:
-    # TODO: test coverage
     parts = string.split(DEFAULT_RS)
     for i, part in enumerate(parts):
         parts[i] = part.strip()

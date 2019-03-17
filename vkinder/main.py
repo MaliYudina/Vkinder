@@ -5,17 +5,28 @@
 - подписчики
 - пользователи общих групп
 """
-import operator
-from vkinder.searchparams import SearchParams
-from .vk import api
-from vkinder.evaluators import eval_city, eval_lists
-#eval_interests, eval_music, eval_books, eval_movies
 from typing import List
+import operator
+
+from vkinder.searchparams import SearchParams
 from .field_adapters import dummy, city_to_string, split_string
+from .evaluators import eval_lists, eval_city
 
+EVALUATORS = {
+    'city': eval_city,
+    'interests': eval_lists,
+    'music': eval_lists,
+    'books': eval_lists,
+    'movies': eval_lists,
+}
+ADAPTERS = {
+    'city': city_to_string,
+    'interests': split_string,
+    'music': split_string,
+    'books': split_string,
+    'movies': split_string,
 
-
-from vkinder.searchparams import EVALUATORS, ADAPTERS
+}
 
 
 def top_n(search_params: SearchParams, candidates: List[dict], number=3) -> List[int]:
@@ -25,27 +36,6 @@ def top_n(search_params: SearchParams, candidates: List[dict], number=3) -> List
      Result is written into a separate dictionary, which will be returned.
     """
     matches = dict()
-
-
-    # дергаем ручку вкапи
-
-    # candidates = api.search(
-    #
-    # )
-    # Pool will be something like:
-    # [{'bdate': '1.11.1901',
-    #  'books': 'words, words, words',
-    #  'can_access_closed': True,
-    #  'city': {'id': 1, 'title': 'Москва'},
-    #  'first_name': 'first',
-    #  'id': 1,
-    #  'interests': 'Guitar, Skate, pop-punk, Concerts, Aliens, XBox 360, PS3, Wii'
-    #  'is_closed': False,
-    #  'last_name': 'last',
-    #  'movies': 'a lot',
-    #  'music': 'Pop-Punk, punk, punk rock, hardcore, blues, funk, jazz',
-    #  'photo_big': ...
-    # ... ]
 
     # Look at each user_raw in the candidates individually.
     for user_raw in candidates:
@@ -77,8 +67,6 @@ def top_n(search_params: SearchParams, candidates: List[dict], number=3) -> List
                 matches[user_raw['id']] = weight
     # return matches
     # список кортежей, отсортированных по второму элементу в каждом кортеже.
-    #[(17300535, 200), (2128351, 100), (2677959, 0)]
+    # [(17300535, 200), (2128351, 100), (2677959, 0)]
     sorted_matches = sorted(matches.items(), key=operator.itemgetter(1), reverse=True)
-    return sorted_matches[0:number]
-
-
+    return [x for x, y in sorted_matches[0:number]]
