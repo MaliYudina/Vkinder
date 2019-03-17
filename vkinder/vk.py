@@ -21,7 +21,9 @@ def search(login, password, fields, age_min, age_max, sex) -> list:
     """
     session = vk.AuthSession(app_id=APP_ID,
                              user_login=login,
-                             user_password=password)
+                             user_password=password
+                             )
+
     vkapi = vk.API(session)
 
     return vkapi.users.search(
@@ -30,4 +32,4 @@ def search(login, password, fields, age_min, age_max, sex) -> list:
         sex=sex,
         age_from=age_min,
         fields=','.join(fields),
-        age_to=age_max)
+        age_to=age_max)['items']

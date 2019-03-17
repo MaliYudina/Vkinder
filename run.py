@@ -12,7 +12,6 @@ def _main():
     get user's input of login, password, filter parameters of a candidate
     """
     # Ask user input?
-
     vk_login = 'aa'
     vk_pw = 'aa'
     age_min = 18
@@ -20,9 +19,9 @@ def _main():
 
     params = SearchParams([
         StringField(name='city', value='Санкт-Петербург', weight=100),
-        ListField(name='books', value=['Shakespeare'], weight=10),
-        ListField(name='movies', value=['The Matrix', 'The Saw'], weight=2),
-        ListField(name='interests', value=['Python', 'Whatever'], weight=1),
+        ListField(name='books', value=['Ремарк'], weight=10),
+        ListField(name='movies', value=['Матрица', 'Пила'], weight=2),
+        ListField(name='interests', value=['Python', 'фитнес'], weight=1),
     ])
 
     candidates = search(

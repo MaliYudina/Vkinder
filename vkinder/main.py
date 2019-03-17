@@ -32,6 +32,8 @@ def top_n(search_params: SearchParams, candidates: List[dict], number=3) -> List
     """
     matches = dict()
 
+    assert isinstance(candidates, list)
+
     # Look at each user_raw in the candidates individually.
     for user_raw in candidates:
         # Process EVALUATORS keys ('city')
