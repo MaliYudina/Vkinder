@@ -8,7 +8,8 @@
 import operator
 from vkinder.searchparams import SearchParams
 from .vk import api
-from vkinder.evaluators import eval_city, eval_interests, eval_music, eval_books, eval_movies
+from vkinder.evaluators import eval_city, eval_lists
+#eval_interests, eval_music, eval_books, eval_movies
 from typing import List
 from .field_adapters import dummy, city_to_string, split_string
 

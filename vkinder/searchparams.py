@@ -3,7 +3,8 @@ Mодуль описывает свойства пользователя Вк д
 """
 
 from typing import List
-from vkinder.evaluators import eval_lists, eval_city, eval_interests, eval_movies, eval_books, eval_music
+from vkinder.evaluators import eval_lists, eval_city
+    #eval_interests, eval_movies, eval_books, eval_music
 from vkinder.field_adapters import city_to_string, split_string
 
 
