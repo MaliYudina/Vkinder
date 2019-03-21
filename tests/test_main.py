@@ -1,7 +1,7 @@
 import unittest
 
 from vkinder import searchparams as sp
-from vkinder.main import top_n
+from vkinder.main import data_process
 
 
 SAMPLE_VK_RESP = [{'bdate': '1.11.1989',
@@ -47,11 +47,11 @@ SAMPLE_VK_RESP = [{'bdate': '1.11.1989',
 
 
 class TestTop(unittest.TestCase):
-    def test_top_n(self):
+    def test_data_process(self):
         search = sp.SearchParams([
             sp.ListField(name='books', value=['Ремарк'], weight=100),
             sp.StringField(name='city', value='Москва', weight=10),
         ])
-        assert top_n(search, SAMPLE_VK_RESP) == [
+        assert data_process(search, SAMPLE_VK_RESP) == [
             17300535, 2128351, 2677959,
         ]

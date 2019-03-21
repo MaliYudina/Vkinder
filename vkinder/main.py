@@ -2,6 +2,7 @@
 Main module initiates the search of the target user by calling other modules
 """
 from typing import List
+import json
 import operator
 
 from vkinder.searchparams import SearchParams
@@ -25,18 +26,18 @@ ADAPTERS = {
 }
 
 
-def top_n(search_params: SearchParams, candidates: List[dict], number=3) -> List[int]:
+def data_process(search_params: SearchParams, candidates: List[dict]) -> dict:
     """
     Get matched candidates, each user_raw processed by evaluators and adapters.
     Result is written as list of IDs.
     """
-    matches = dict()
-
     assert isinstance(candidates, list)
+    data = dict()
 
     # Look at each user_raw in the candidates individually.
     for user_raw in candidates:
         # Process EVALUATORS keys ('city')
+        weight = 0
         for field, evaluator in EVALUATORS.items():
             # field = e.g. 'city'
             # evaluator = e.g. 'city_to_string'
@@ -52,14 +53,48 @@ def top_n(search_params: SearchParams, candidates: List[dict], number=3) -> List
             adapter = ADAPTERS.get(
                 field, dummy)
 
-            weight = evaluator(
+            weight += evaluator(
                 adapter(user_raw[field]),
                 field_obj.value,
                 field_obj.weight,
             )
-            try:
-                matches[user_raw['id']] += weight
-            except KeyError:
-                matches[user_raw['id']] = weight
-    sorted_matches = sorted(matches.items(), key=operator.itemgetter(1), reverse=True)
-    return [x for x, y in sorted_matches[0:number]]
+
+        data[user_raw['id']] = {'weight': weight, 'user': user_raw}
+
+        filename = 'data_answer.json'
+        with open(filename, 'w', encoding='utf-8') as f:
+            f.write(json.dumps(data,
+                               sort_keys=False,
+                               indent=4,
+                               ensure_ascii=False,
+                               separators=(',', ': ')))
+
+    return data
+
+
+def sort_data(data):
+    sort_list = {}
+    for uid, user in data.items():
+        sort_list[uid] = user['weight']
+
+    filename = 'sorted_weight.json'
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write(json.dumps(sort_list,
+                           sort_keys=False,
+                           indent=4,
+                           ensure_ascii=False,
+                           separators=(',', ': ')))
+    return sort_list
+
+
+
+
+# return [uid for uid, _ in sorted_matches[0:number]]
+
+# получаем список групп пользователя
+# если мэтч юзер имеет группу такую же - кладем в обший список
+# for user in group
+
+
+def groups_matching():
+    pass
