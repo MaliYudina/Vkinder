@@ -7,6 +7,7 @@ APP_ID = 6776462
 VERSION = 5.92
 MALE = 2
 FEMALE = 1
+USER = 1
 
 
 def search(login, password, fields, age_min, age_max, sex) -> list:
@@ -32,4 +33,24 @@ def search(login, password, fields, age_min, age_max, sex) -> list:
         sex=sex,
         age_from=age_min,
         fields=','.join(fields),
-        age_to=age_max)['items']
+        age_to=age_max,
+    )['items']
+
+
+def get_photos(login, password, owner_id) -> list:
+    session = vk.AuthSession(app_id=APP_ID,
+                             user_login=login,
+                             user_password=password
+                             )
+
+    vkapi = vk.API(session)
+
+    photos_response = vkapi.photos.get(
+        v=VERSION,
+        count=1000,
+        owner_id=USER,  #TODO вернуть сюда топ юзеров, добавить цикл для каждого топа
+        album_id='profile',
+        extended=1,
+    )['items']
+
+    return photos_response

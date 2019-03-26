@@ -3,7 +3,7 @@ run module communicates with user input for the following initialization
 of main module
 """
 from vkinder.searchparams import SearchParams, StringField, ListField
-from vkinder.vk import search, MALE
+from vkinder.vk import search, MALE, get_photos
 from vkinder.main import data_process, sort_data
 
 
@@ -14,14 +14,14 @@ def _main():
     # Ask user input?
     vk_login = ''
     vk_pw = ''
-    age_min = 18
+    age_min = 30
     age_max = 50
 
     params = SearchParams([
         StringField(name='city', value='Москва', weight=100),
         ListField(name='books', value=['Ремарк'], weight=10),
-        ListField(name='movies', value=['Матрица'], weight=2),
-        ListField(name='interests', value=['фитнес'], weight=1),
+        ListField(name='movies', value=['Матрица'], weight=50),
+        ListField(name='interests', value=['фитнес'], weight=60),
     ])
 
     candidates = search(
@@ -33,10 +33,18 @@ def _main():
         sex=MALE,
     )
 
-    top_3 = data_process(search_params=params, candidates=candidates)
-    sort_data(top_3)
-    print('Top_3:', top_3)
+    photos = get_photos(
+        login=vk_login,
+        password=vk_pw,
+        owner_id=1,
+    )
 
+    top_n = data_process(search_params=params, candidates=candidates)
+    sorted_result = sort_data(top_n)
+    ph = photos
+    print(ph)
+    print('Top candidates sorted by weight: ', list(sorted_result)[0:10])
+    print('Done!')
 
 
 if __name__ == '__main__':

@@ -4,10 +4,12 @@ Main module initiates the search of the target user by calling other modules
 from typing import List
 import json
 import operator
+from trash2 import sample
 
 from vkinder.searchparams import SearchParams
 from .field_adapters import dummy, city_to_string, split_string
 from .evaluators import eval_lists, eval_city
+
 
 EVALUATORS = {
     'city': eval_city,
@@ -73,27 +75,45 @@ def data_process(search_params: SearchParams, candidates: List[dict]) -> dict:
 
 
 def sort_data(data):
-    sort_list = {}
+    sort_dict = {}
     for uid, user in data.items():
-        sort_list[uid] = user['weight']
+        sort_dict[uid] = user['weight']
+
+    sort_by_weight = dict(sorted(sort_dict.items(), key=lambda item: item[1], reverse=True))
 
     filename = 'sorted_weight.json'
     with open(filename, 'w', encoding='utf-8') as f:
-        f.write(json.dumps(sort_list,
+        f.write(json.dumps(sort_by_weight,
                            sort_keys=False,
-                           indent=4,
-                           ensure_ascii=False,
+                           indent=2,
+                           ensure_ascii=True,
                            separators=(',', ': ')))
-    return sort_list
+
+    user_list = []
+    for user in sort_by_weight.keys():
+        user_list.append(user)
+    top_10_list = user_list[0:10]
+
+    # print(top_10_list)
+
+    return sort_by_weight
 
 
+def best_photos():
+    photos_response = sample
+
+    photos_dict = dict()
+    for photo in photos_response:
+        likes = photo['likes']['count']
+        for size in photo['sizes']:
+            if size['type'] == 'x':
+                link = size['url']
+        photos_dict[link] = likes
+
+    top3_photos = sorted(photos_dict.items(), key=lambda x: x[1], reverse=True)[0:3]
+    print('Топ 3 фото', top3_photos)
 
 
-# return [uid for uid, _ in sorted_matches[0:number]]
-
-# получаем список групп пользователя
-# если мэтч юзер имеет группу такую же - кладем в обший список
-# for user in group
 
 
 def groups_matching():
