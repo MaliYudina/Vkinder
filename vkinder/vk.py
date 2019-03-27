@@ -3,11 +3,11 @@ vk module calls to vk, using methods, and parameters (age, city, interests, i.e)
 """
 import vk
 
-APP_ID = 6776462
+
+APP_ID = 6120276
 VERSION = 5.92
 MALE = 2
 FEMALE = 1
-USER = 1
 
 
 def search(login, password, fields, age_min, age_max, sex) -> list:
@@ -48,9 +48,9 @@ def get_photos(login, password, owner_id) -> list:
     photos_response = vkapi.photos.get(
         v=VERSION,
         count=1000,
-        owner_id=USER,  #TODO вернуть сюда топ юзеров, добавить цикл для каждого топа
         album_id='profile',
         extended=1,
+        owner_id=owner_id,
     )['items']
 
     return photos_response

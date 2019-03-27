@@ -5,6 +5,7 @@ of main module
 from vkinder.searchparams import SearchParams, StringField, ListField
 from vkinder.vk import search, MALE, get_photos
 from vkinder.main import data_process, sort_data
+import time
 
 
 def _main():
@@ -18,10 +19,10 @@ def _main():
     age_max = 50
 
     params = SearchParams([
-        StringField(name='city', value='Москва', weight=100),
-        ListField(name='books', value=['Ремарк'], weight=10),
-        ListField(name='movies', value=['Матрица'], weight=50),
-        ListField(name='interests', value=['фитнес'], weight=60),
+        StringField(name='city', value='Самара', weight=50),
+        ListField(name='books', value=['Ремарк'], weight=100),
+        ListField(name='movies', value=['Матрица'], weight=200),
+        ListField(name='interests', value=['фитнес'], weight=150),
     ])
 
     candidates = search(
@@ -33,17 +34,27 @@ def _main():
         sex=MALE,
     )
 
-    photos = get_photos(
-        login=vk_login,
-        password=vk_pw,
-        owner_id=1,
-    )
+    top_10_candidates = data_process(search_params=params, candidates=candidates)
+    sorted_result = sort_data(top_10_candidates)
+    sorted_top_10 = list(sorted_result)[0:10]
 
-    top_n = data_process(search_params=params, candidates=candidates)
-    sorted_result = sort_data(top_n)
-    ph = photos
-    print(ph)
-    print('Top candidates sorted by weight: ', list(sorted_result)[0:10])
+    for candidate in sorted_top_10:
+        time.sleep(0.5)
+        photos = get_photos(
+            login=vk_login,
+            password=vk_pw,
+            owner_id=candidate,
+        )
+        photos_dict = dict()
+        for photo in photos:
+            likes = photo['likes']['count']
+            for size in photo['sizes']:
+                if size['type'] == 'x':
+                    url = size['url']
+            photos_dict[url] = likes
+        top3_photos = sorted(photos_dict.items(), key=lambda x: x[1], reverse=True)[0:3]
+        print('Топ 3 фото для id', candidate, top3_photos)
+
     print('Done!')
 
 

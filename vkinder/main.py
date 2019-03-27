@@ -3,9 +3,6 @@ Main module initiates the search of the target user by calling other modules
 """
 from typing import List
 import json
-import operator
-from trash2 import sample
-
 from vkinder.searchparams import SearchParams
 from .field_adapters import dummy, city_to_string, split_string
 from .evaluators import eval_lists, eval_city
@@ -94,26 +91,9 @@ def sort_data(data):
         user_list.append(user)
     top_10_list = user_list[0:10]
 
-    # print(top_10_list)
+    print(top_10_list)
 
     return sort_by_weight
-
-
-def best_photos():
-    photos_response = sample
-
-    photos_dict = dict()
-    for photo in photos_response:
-        likes = photo['likes']['count']
-        for size in photo['sizes']:
-            if size['type'] == 'x':
-                link = size['url']
-        photos_dict[link] = likes
-
-    top3_photos = sorted(photos_dict.items(), key=lambda x: x[1], reverse=True)[0:3]
-    print('Топ 3 фото', top3_photos)
-
-
 
 
 def groups_matching():
